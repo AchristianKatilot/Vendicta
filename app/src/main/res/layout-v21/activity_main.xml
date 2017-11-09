@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_dark"
+    tools:context="vendicta.revolution.MainActivity">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_dark"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="8dp">
+
+                <Button
+                    android:id="@+id/profileSelector"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/ButtonBackground"
+                    android:text="@string/standart"
+                    android:textColor="@android:color/darker_gray"
+                    android:onClick="bProfileClick"
+                    android:layout_width="0dp" />
+
+                <Button
+                    android:id="@+id/bSave"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/ButtonBackground"
+                    android:foreground="@android:drawable/ic_menu_save"
+                    android:onClick="bApplyClick"
+                    android:textColor="@android:color/background_light" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/bAttack"
+                style="@style/Widget.AppCompat.Button.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:background="@color/ButtonBackground"
+                android:drawableEnd="@drawable/attack"
+                android:drawablePadding="-10dp"
+                android:onClick="bAttackClick"
+                android:paddingEnd="10dp"
+                android:text="@string/attack"
+                android:textColor="@android:color/background_light" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
+
+            <ImageView
+                android:layout_width="fill_parent" android:layout_height="fill_parent"
+                android:src="@drawable/drawable" android:scaleType="fitXY" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textServerName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/name"
+                        android:textIsSelectable="true"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:id="@+id/textServerDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/desc"
+                        android:textIsSelectable="true"
+                        android:textColor="@android:color/darker_gray"
+                        tools:text="@string/desc" />
+
+                    <TextView
+                        android:id="@+id/textServerAddr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/addr"
+                        android:textIsSelectable="true"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:id="@+id/textPacketSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/packetSize"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:id="@+id/textInterval"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/interval"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:id="@+id/textThreads"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/threads"
+                        android:textColor="@android:color/background_light" />
+
+
+                    <SeekBar
+                        android:id="@+id/threadsBar"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="8"
+                        android:progress="4" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_weight="0" />
+
+                    <TextView
+                        android:id="@+id/textClientIP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/clientIP"
+                        android:textIsSelectable="true"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:id="@+id/textAttackStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="@string/attackStatus"
+                        android:textColor="@android:color/background_light" />
+
+                    <TextView
+                        android:id="@+id/textPacketsSent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/packetsSent"
+                        android:textColor="@android:color/background_light" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_weight="0" />
+
+                    <View
+                        android:id="@+id/HorizontalLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_marginEnd="80dp"
+                        android:layout_marginStart="80dp"
+                        android:background="#353535" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_weight="0" />
+
+                    <TextView
+                        android:id="@+id/textSourceMOTD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text=""
+                        android:textIsSelectable="true"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:gravity="bottom|end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:onClick="bInfoClick"
+                    android:foreground="@android:drawable/ic_menu_info_details" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
