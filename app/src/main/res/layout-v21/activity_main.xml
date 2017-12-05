@@ -7,6 +7,72 @@
     tools:context="vendicta.revolution.MainActivity">
 
     <LinearLayout
+        android:id="@+id/layout_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:background="@android:color/black"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/drawable" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/info"
+                        android:textColor="@android:color/background_light"
+                        android:textIsSelectable="true"
+                        tools:text="Текст \n\n текст 123" />
+
+                    <Button
+                        android:id="@+id/bBack"
+                        style="@style/Widget.AppCompat.Button.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/ButtonBackground"
+                        android:drawableEnd="@android:drawable/ic_menu_revert"
+                        android:drawablePadding="-30dp"
+                        android:drawableRight="@drawable/attack"
+                        android:onClick="bBackLayoutInfoClick"
+                        android:paddingRight="10dp"
+                        android:text="@string/back"
+                        android:textColor="@android:color/background_light" />
+                </LinearLayout>
+
+            </ScrollView>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_main"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@android:color/background_dark"
@@ -30,16 +96,16 @@
 
                 <Button
                     android:id="@+id/profileSelector"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:background="@color/ButtonBackground"
-                    android:text="@string/standart"
-                    android:textColor="@android:color/darker_gray"
                     android:onClick="bProfileClick"
-                    android:layout_width="0dp" />
+                    android:text="@string/standart"
+                    android:textColor="@android:color/darker_gray" />
 
                 <Button
                     android:id="@+id/bSave"
@@ -81,8 +147,10 @@
             tools:layout_editor_absoluteY="8dp">
 
             <ImageView
-                android:layout_width="fill_parent" android:layout_height="fill_parent"
-                android:src="@drawable/drawable" android:scaleType="fitXY" />
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/drawable" />
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -99,8 +167,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:text="@string/name"
-                        android:textIsSelectable="true"
-                        android:textColor="@android:color/background_light" />
+                        android:textColor="@android:color/background_light"
+                        android:textIsSelectable="true" />
 
                     <TextView
                         android:id="@+id/textServerDesc"
@@ -108,8 +176,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:text="@string/desc"
-                        android:textIsSelectable="true"
                         android:textColor="@android:color/darker_gray"
+                        android:textIsSelectable="true"
                         tools:text="@string/desc" />
 
                     <TextView
@@ -118,8 +186,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:text="@string/addr"
-                        android:textIsSelectable="true"
-                        android:textColor="@android:color/background_light" />
+                        android:textColor="@android:color/background_light"
+                        android:textIsSelectable="true" />
 
                     <TextView
                         android:id="@+id/textPacketSize"
@@ -166,8 +234,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:text="@string/clientIP"
-                        android:textIsSelectable="true"
-                        android:textColor="@android:color/background_light" />
+                        android:textColor="@android:color/background_light"
+                        android:textIsSelectable="true" />
 
                     <TextView
                         android:id="@+id/textAttackStatus"
@@ -208,8 +276,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:text=""
-                        android:textIsSelectable="true"
                         android:textColor="@android:color/darker_gray"
+                        android:textIsSelectable="true"
                         android:textStyle="italic" />
 
                 </LinearLayout>
@@ -229,8 +297,8 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:onClick="bInfoClick"
-                    android:foreground="@android:drawable/ic_menu_info_details" />
+                    android:foreground="@android:drawable/ic_menu_info_details"
+                    android:onClick="bInfoClick" />
             </LinearLayout>
 
         </RelativeLayout>

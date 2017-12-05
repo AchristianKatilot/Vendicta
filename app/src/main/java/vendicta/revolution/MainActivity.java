@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button profileSelector;
     private Button bAttack;
+    private Button bBack;
     private Button bSave;
     private TextView textServerName;
     private TextView textServerDesc;
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textAttackStatus;
     private TextView textPacketsSent;
     private TextView textSourceMOTD;
+    private LinearLayout layout_main;
+    private LinearLayout layout_info;
 
     private String serverAddr;
     private int serverPort;
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         profileSelector = (Button) findViewById(R.id.profileSelector);
         bAttack = (Button) findViewById(R.id.bAttack);
+        bBack = (Button) findViewById(R.id.bBack);
         bSave = (Button) findViewById(R.id.bSave);
         textServerName = (TextView) findViewById(R.id.textServerName);
         textServerDesc = (TextView) findViewById(R.id.textServerDesc);
@@ -87,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         textAttackStatus = (TextView) findViewById(R.id.textAttackStatus);
         textPacketsSent = (TextView) findViewById(R.id.textPacketsSent);
         textSourceMOTD = (TextView) findViewById(R.id.textSourceMOTD);
+        layout_main = (LinearLayout) findViewById(R.id.layout_main);
+        layout_info = (LinearLayout) findViewById(R.id.layout_info);
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -167,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putInt("threadCount", threadCount);
         editor.apply();
-        //Toast.makeText(getApplicationContext(), "Потоки сохранены", Toast.LENGTH_SHORT).show();
     }
 
     public void bAttackClick(View view) throws IOException {
@@ -284,12 +290,26 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    // сокрытие основного меню и показ информации
     public void bInfoClick(View view) {
-        Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-        startActivity(intent);
-        //NetworkIntentService service = new NetworkIntentService("main");
-        //service.onHandleIntent(intent);
-        //startService(new Intent(this, MyService.class));
+
+        layout_main.setAlpha(0f);
+        layout_main.setEnabled(false);
+        layout_info.setAlpha(1f);
+        layout_info.setEnabled(true);
+        layout_info.bringToFront();
+        layout_info.invalidate();
+    }
+
+    // сокрытие информации и показ основного меню
+    public void bBackLayoutInfoClick(View view) {
+
+        layout_main.setAlpha(1f);
+        layout_main.setEnabled(true);
+        layout_info.setAlpha(0f);
+        layout_info.setEnabled(false);
+        layout_main.bringToFront();
+        layout_main.invalidate();
     }
 
     void loadProfile() throws IOException {
