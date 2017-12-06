@@ -59,7 +59,7 @@
                         android:drawableEnd="@android:drawable/ic_menu_revert"
                         android:drawablePadding="-30dp"
                         android:drawableRight="@drawable/attack"
-                        android:onClick="bBackLayoutInfoClick"
+                        android:onClick="bBackClick"
                         android:paddingRight="10dp"
                         android:text="@string/back"
                         android:textColor="@android:color/background_light" />
